@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nét Mực Tri Ân | THCS Bình Lợi</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="#trangchu" class="brand">🌿 THCS BÌNH LỢI</a>
+    <div class="menu">
+      <a href="#trangchu">Trang chủ</a>
+      <a href="#loingo">Lời ngỏ</a>
+      <a href="#baiviet">Bài viết</a>
+      <a href="#goc-tho">Góc thơ</a>
+      <a href="#album">Album</a>
+      <a href="#loichuc">Lời chúc</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section id="trangchu" class="hero">
+    <div class="hero-frame">
+      <div class="decor">✿ ❀ ✿</div>
+      <p class="school">TRƯỜNG THCS BÌNH LỢI</p>
+      <h1 id="siteTitle">Nét Mực Tri Ân</h1>
+      <h2>BÁO TƯỜNG ĐIỆN TỬ 20/11</h2>
+      <p id="siteSubtitle">
+        Chào mừng Ngày Nhà giáo Việt Nam 20/11/2026
+      </p>
+      <p>Mỗi trang viết là một lời cảm ơn.</p>
+      <a href="#loingo" class="btn">Khám phá báo tường</a>
+    </div>
+  </section>
+
+  <section id="loingo" class="section">
+    <div class="container">
+      <h2 class="section-title">Lời Ngỏ</h2>
+      <p class="section-desc">
+        Những lời từ trái tim gửi đến người lái đò
+      </p>
+      <article class="paper">
+        <div id="introduction"></div>
+        <p class="signature">
+          Tập thể học sinh Trường THCS Bình Lợi
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="baiviet" class="section soft">
+    <div class="container">
+      <h2 class="section-title">Trang Viết Yêu Thương</h2>
+      <p class="section-desc">Những câu chuyện nhỏ, tình cảm lớn</p>
+      <div id="articleList" class="grid"></div>
+    </div>
+  </section>
+
+  <section id="goc-tho" class="section">
+    <div class="container">
+      <h2 class="section-title">Vần Thơ Tri Ân</h2>
+      <p class="section-desc">Tiếng lòng của tuổi học trò</p>
+      <div id="poemList" class="grid"></div>
+    </div>
+  </section>
+
+  <section id="album" class="section soft">
+    <div class="container">
+      <h2 class="section-title">Khoảnh Khắc Thanh Xuân</h2>
+      <p class="section-desc">Lưu giữ kỷ niệm mái trường</p>
+      <div id="gallery" class="gallery"></div>
+    </div>
+  </section>
+
+  <section id="loichuc" class="section">
+    <div class="container">
+      <h2 class="section-title">Hộp Thư Tri Ân</h2>
+      <p class="section-desc">
+        Gửi những lời yêu thương đến thầy cô
+      </p>
+
+      <form id="wishForm" class="paper form-panel">
+        <label for="studentName">Họ tên / Lớp</label>
+        <input id="studentName" maxlength="80"
+               required placeholder="Ví dụ: Nguyễn An - 6/1">
+
+        <label for="wishMessage">Lời chúc</label>
+        <textarea id="wishMessage" rows="5"
+                  maxlength="500" required
+                  placeholder="Viết lời chúc gửi thầy cô..."></textarea>
+
+        <button class="btn" type="submit">💌 Gửi lời tri ân</button>
+        <p id="wishStatus" role="status"></p>
+      </form>
+
+      <h3 class="center">Những lời chúc đã được chia sẻ</h3>
+      <div id="wishList" class="grid"></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="articleDialog" class="article-dialog">
+  <button id="closeDialog" class="close-btn"
+          aria-label="Đóng">✕</button>
+  <h2 id="dialogTitle"></h2>
+  <div id="dialogContent" class="article-text"></div>
+</dialog>
+
+<footer>
+  <h3>🌸 NÉT MỰC TRI ÂN 🌸</h3>
+  <p>TRƯỜNG THCS BÌNH LỢI</p>
+  <p>Chào mừng Ngày Nhà giáo Việt Nam 20/11/2026</p>
+</footer>
+
+</body>
+</html>
