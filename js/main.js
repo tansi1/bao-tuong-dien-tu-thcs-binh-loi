@@ -369,141 +369,121 @@ function setupWishForm() {
    10. SLIDESHOW TRANG CHỦ
 ========================================= */
 
+
+/* ===================================
+   SLIDESHOW - CHUYỂN ẢNH MƯỢT
+=================================== */
+
 function setupSlideshow() {
   const slideshow = document.querySelector(".hero-slideshow");
-
   if (!slideshow) return;
 
-  const slides = [
-    ...slideshow.querySelectorAll(".slide")
-  ];
+  // Ngăn khởi tạo slideshow nhiều lần
+  if (slideshow.dataset.initialized === "true") return;
+  slideshow.dataset.initialized = "true";
+
+  const slides = Array.from(
+    slideshow.querySelectorAll(".slide")
+  );
 
   const dotsContainer = slideshow.querySelector(".slide-dots");
-  const prevButton = slideshow.querySelector(".slide-prev");
-  const nextButton = slideshow.querySelector(".slide-next");
+  const prevBtn = slideshow.querySelector(".slide-prev");
+  const nextBtn = slideshow.querySelector(".slide-next");
 
-  if (
-    slides.length === 0 ||
-    !dotsContainer ||
-    !prevButton ||
-    !nextButton
-  ) {
-    return;
-  }
+  if (!slides.length || !dotsContainer) return;
 
-  let currentSlide = 0;
+  let currentIndex = 0;
   let timer = null;
 
-  dotsContainer.replaceChildren();
+  const INTERVAL = 5000;
 
-  // Tạo các chấm điều hướng
+  // Xóa các chấm cũ
+  dotsContainer.innerHTML = "";
+
+  // Tạo chấm mới
   slides.forEach((slide, index) => {
     const dot = document.createElement("button");
-
     dot.type = "button";
     dot.className = "slide-dot";
-
-    dot.setAttribute(
-      "aria-label",
-      `Chuyển đến ảnh ${index + 1}`
-    );
+    dot.setAttribute("aria-label", `Xem ảnh ${index + 1}`);
 
     dot.addEventListener("click", () => {
-      showSlide(index);
-      restartTimer();
+      goToSlide(index);
     });
 
     dotsContainer.appendChild(dot);
   });
 
-  const dots = [
-    ...dotsContainer.querySelectorAll("button")
-  ];
+  const dots = Array.from(
+    dotsContainer.querySelectorAll(".slide-dot")
+  );
 
-  // Hiển thị ảnh được chọn
+  // Hiển thị đúng một ảnh
   function showSlide(index) {
-    currentSlide =
-      (index + slides.length) % slides.length;
+    currentIndex = (index + slides.length) % slides.length;
 
     slides.forEach((slide, i) => {
-      const isActive = i === currentSlide;
+      const active = i === currentIndex;
 
-      slide.classList.toggle("active", isActive);
+      slide.classList.toggle("active", active);
+      slide.setAttribute("aria-hidden", String(!active));
+    });
 
-      if (dots[i]) {
-        dots[i].classList.toggle("active", isActive);
-
-        dots[i].setAttribute(
-          "aria-current",
-          isActive ? "true" : "false"
-        );
-      }
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentIndex);
     });
   }
 
-  // Chuyển ảnh tiếp theo
-  function nextSlide() {
-    showSlide(currentSlide + 1);
-  }
-
-  // Chuyển ảnh trước
-  function previousSlide() {
-    showSlide(currentSlide - 1);
-  }
-
-  // Tự động chuyển ảnh mỗi 4 giây
-  function startTimer() {
-    if (slides.length <= 1) return;
-
-    timer = setInterval(() => {
-      nextSlide();
-    }, 4000);
-  }
-
+  // Dừng bộ đếm cũ
   function stopTimer() {
     if (timer !== null) {
-      clearInterval(timer);
+      clearTimeout(timer);
       timer = null;
     }
   }
 
-  function restartTimer() {
+  // Lên lịch chuyển ảnh tiếp theo
+  function startTimer() {
     stopTimer();
+
+    if (slides.length <= 1 || document.hidden) return;
+
+    timer = setTimeout(() => {
+      showSlide(currentIndex + 1);
+      startTimer();
+    }, INTERVAL);
+  }
+
+  // Chuyển ảnh thủ công
+  function goToSlide(index) {
+    showSlide(index);
     startTimer();
   }
 
-  // Nút ảnh trước
-  prevButton.addEventListener("click", () => {
-    previousSlide();
-    restartTimer();
+  // Nút quay lại
+  prevBtn?.addEventListener("click", () => {
+    goToSlide(currentIndex - 1);
   });
 
-  // Nút ảnh tiếp theo
-  nextButton.addEventListener("click", () => {
-    nextSlide();
-    restartTimer();
+  // Nút tiếp theo
+  nextBtn?.addEventListener("click", () => {
+    goToSlide(currentIndex + 1);
   });
 
-  // Tạm dừng khi rê chuột vào slideshow
-  slideshow.addEventListener("mouseenter", stopTimer);
-
-  slideshow.addEventListener("mouseleave", startTimer);
-
-  // Dừng khi tab trình duyệt bị ẩn
+  // Quản lý khi đổi tab trình duyệt
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       stopTimer();
     } else {
-      restartTimer();
+      startTimer();
     }
   });
 
-  // Khởi tạo ảnh đầu tiên
+  // Khởi tạo
   showSlide(0);
   startTimer();
-
-  console.log("Slideshow đã khởi tạo thành công.");
 }
+
 
 /* =========================================
    11. KHỞI ĐỘNG WEBSITE

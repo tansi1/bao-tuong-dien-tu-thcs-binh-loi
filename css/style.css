@@ -337,3 +337,484 @@ footer {
   .hero-slideshow { height: 230px; }
   .slide-caption { font-size: 15px; }
 }
+
+/* =========================================
+   MỞ RỘNG GIAO DIỆN WEBSITE
+   NÉT MỰC TRI ÂN - THCS BÌNH LỢI
+========================================= */
+
+/* Mở rộng các phần nội dung */
+.container {
+  width: 92%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mở rộng thanh điều hướng */
+.nav {
+  width: 92%;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+/* Trang chủ */
+.hero {
+  padding: 65px 20px;
+  box-sizing: border-box;
+}
+
+/* Khung tiêu đề */
+.hero-frame {
+  width: 92%;
+  max-width: 1150px;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 65px 45px;
+}
+
+/* Tiêu đề chính */
+.hero-frame h1 {
+  font-size: clamp(55px, 6.5vw, 105px);
+  line-height: 1.2;
+}
+
+/* Tiêu đề phụ */
+.hero-frame h2 {
+  font-size: clamp(19px, 2.2vw, 28px);
+}
+
+/* Slideshow hình ảnh */
+.hero-slideshow {
+  width: 92%;
+  max-width: 1150px;
+  height: 440px;
+  margin: 40px auto 30px;
+}
+
+/* Các khu vực nội dung */
+.section {
+  padding: 75px 20px;
+  box-sizing: border-box;
+}
+
+/* Bố cục bài viết */
+.grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+}
+
+/* Album */
+.gallery {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* Responsive cho tablet */
+@media (max-width: 900px) {
+  .hero-frame {
+    width: 95%;
+    padding: 50px 25px;
+  }
+
+  .hero-slideshow {
+    width: 95%;
+    height: 350px;
+  }
+
+  .grid,
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 600px) {
+  .container {
+    width: 94%;
+  }
+
+  .hero {
+    padding: 35px 10px;
+  }
+
+  .hero-frame {
+    width: 100%;
+    padding: 40px 18px;
+  }
+
+  .hero-frame h1 {
+    font-size: clamp(42px, 10vw, 60px);
+  }
+
+  .hero-frame h2 {
+    font-size: 18px;
+  }
+
+  .hero-slideshow {
+    width: 100%;
+    height: 230px;
+  }
+
+  .grid,
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 45px 12px;
+  }
+}
+
+/* ==================================
+   HEADER RỘNG GẦN SÁT HAI BÊN
+================================== */
+
+.header {
+  width: 100%;
+}
+
+.header .nav {
+  width: calc(100% - 80px);
+  max-width: none;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Logo bên trái */
+.header .brand {
+  flex-shrink: 0;
+}
+
+/* Menu bên phải */
+.header .menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+/* Màn hình tablet */
+@media (max-width: 900px) {
+  .header .nav {
+    width: calc(100% - 40px);
+  }
+
+  .header .menu {
+    gap: 12px;
+  }
+}
+
+/* Điện thoại */
+@media (max-width: 600px) {
+  .header .nav {
+    width: calc(100% - 24px);
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .header .menu {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 15px;
+  }
+}
+
+/* ========================================
+   MỞ RỘNG TOÀN BỘ WEBSITE - BẢN 1500PX
+======================================== */
+
+/* Khung nội dung chung */
+.container {
+  width: 95%;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Trang chủ */
+.hero {
+  width: 100%;
+  padding: 55px 20px;
+  box-sizing: border-box;
+}
+
+/* Khung Nét Mực Tri Ân */
+.hero-frame {
+  width: 95%;
+  max-width: 1450px;
+  padding: 75px 55px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Tiêu đề chính */
+.hero-frame h1 {
+  font-size: clamp(65px, 7vw, 115px);
+  line-height: 1.2;
+}
+
+/* Tiêu đề phụ */
+.hero-frame h2 {
+  font-size: clamp(23px, 2.3vw, 34px);
+}
+
+/* Nội dung giới thiệu */
+.hero-frame p {
+  font-size: clamp(17px, 1.3vw, 21px);
+  line-height: 1.8;
+}
+
+/* Nút khám phá */
+.hero-frame .btn {
+  font-size: 18px;
+  padding: 16px 32px;
+}
+
+/* Slideshow */
+.hero-slideshow {
+  width: 95%;
+  max-width: 1450px;
+  height: 540px;
+  margin: 45px auto;
+}
+
+/* Các khu vực nội dung */
+.section {
+  padding: 85px 20px;
+}
+
+/* Tiêu đề từng khu vực */
+.section-title {
+  font-size: clamp(32px, 3vw, 46px);
+}
+
+/* Mô tả khu vực */
+.section-desc {
+  font-size: 19px;
+}
+
+/* Bài viết và góc thơ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+
+/* Thẻ bài viết */
+.card {
+  padding: 30px;
+}
+
+/* Tiêu đề bài viết */
+.card h3 {
+  font-size: 25px;
+}
+
+/* Nội dung bài viết */
+.card p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* Album hình ảnh */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+/* Hình trong album */
+.gallery img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* Khung lời ngỏ và lời chúc */
+.paper {
+  padding: 45px;
+  font-size: 19px;
+  line-height: 1.9;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .hero-frame {
+    width: 96%;
+    padding: 55px 30px;
+  }
+
+  .hero-slideshow {
+    width: 96%;
+    height: 370px;
+  }
+
+  .grid,
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Điện thoại */
+@media (max-width: 600px) {
+  .container {
+    width: 94%;
+  }
+
+  .hero {
+    padding: 30px 10px;
+  }
+
+  .hero-frame {
+    width: 100%;
+    padding: 40px 18px;
+  }
+
+  .hero-frame h1 {
+    font-size: clamp(43px, 10vw, 62px);
+  }
+
+  .hero-frame h2 {
+    font-size: 20px;
+  }
+
+  .hero-frame p {
+    font-size: 15px;
+  }
+
+  .hero-slideshow {
+    width: 100%;
+    height: 240px;
+  }
+
+  .section {
+    padding: 50px 12px;
+  }
+
+  .grid,
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery img {
+    height: 240px;
+  }
+
+  .paper {
+    padding: 22px;
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+}
+
+/* ===================================
+   HEADER MENU MỚI
+=================================== */
+
+.header .nav {
+  width: calc(100% - 60px);
+  max-width: none;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.header .menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+
+.header .menu a {
+  color: #494238;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.header .menu a:hover {
+  color: #aa4938;
+}
+
+/* ===================================
+   CÁC KHU VỰC CHỨC NĂNG MỚI
+=================================== */
+
+.feature-placeholder {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 65px 30px;
+  text-align: center;
+  background: #fffaf0;
+  border: 1px solid #d6b77e;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(70, 50, 20, 0.06);
+}
+
+.feature-icon {
+  display: block;
+  font-size: 55px;
+  margin-bottom: 20px;
+}
+
+.feature-placeholder h3 {
+  font-size: 27px;
+  color: #315f49;
+  margin-bottom: 15px;
+}
+
+.feature-placeholder p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #64584b;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+
+@media (max-width: 900px) {
+  .header .nav {
+    width: calc(100% - 30px);
+    flex-direction: column;
+    padding: 12px 0;
+  }
+
+  .header .menu {
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header .menu a {
+    font-size: 12px;
+  }
+
+  .feature-placeholder {
+    padding: 40px 20px;
+  }
+
+  .feature-placeholder h3 {
+    font-size: 22px;
+  }
+
+  .feature-placeholder p {
+    font-size: 16px;
+  }
+}
