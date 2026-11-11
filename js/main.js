@@ -1,96 +1,95 @@
 
-/* =========================================
+/* ==========================================
    NÉT MỰC TRI ÂN - THCS BÌNH LỢI
-   MAIN JAVASCRIPT
-========================================= */
+   PHIÊN BẢN GITHUB PAGES
+   KHÔNG CẦN BACKEND / ADMIN
+========================================== */
 
-const API = "/api";
+const DATA_URL = "./data/site.json";
 
-/* =========================================
-   1. XỬ LÝ API
-========================================= */
+/* ==========================================
+   1. HÀM HỖ TRỢ
+========================================== */
 
-async function request(url, options = {}) {
-  let response;
-
-  try {
-    response = await fetch(url, options);
-  } catch (error) {
-    throw new Error(
-      "Không thể kết nối máy chủ. Hãy kiểm tra backend Node.js."
-    );
-  }
-
-  const contentType = response.headers.get("content-type") || "";
-
-  if (!contentType.includes("application/json")) {
-    throw new Error(
-      "API không trả về JSON. " +
-      "Hãy chạy website bằng server.js thay vì Live Server (5500). " +
-      "Đường dẫn đang gọi: " + url
-    );
-  }
-
-  let data;
-
-  try {
-    data = await response.json();
-  } catch (error) {
-    throw new Error("Dữ liệu JSON từ máy chủ không hợp lệ.");
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      data.error || `Lỗi máy chủ: ${response.status}`
-    );
-  }
-
-  return data;
-}
-
-/* =========================================
-   2. TẠO PHẦN TỬ HTML
-========================================= */
-
-function element(tag, className = "", text) {
+function createElement(tag, className = "", text = "") {
   const el = document.createElement(tag);
-
-  if (className) {
-    el.className = className;
-  }
-
-  if (text !== undefined && text !== null) {
-    el.textContent = String(text);
-  }
-
+  if (className) el.className = className;
+  el.textContent = text;
   return el;
 }
 
-/* =========================================
-   3. HIỂN THỊ LỜI NGỎ
-========================================= */
+/* ==========================================
+   2. TẢI DỮ LIỆU TỪ JSON
+========================================== */
 
-function renderText(container, text) {
-  if (!container) return;
+async function loadWebsite() {
+  try {
+    const response = await fetch(DATA_URL, {
+      cache: "no-cache"
+    });
 
-  container.replaceChildren();
-
-  const paragraphs = String(text || "").split(/\n\s*\n/);
-
-  for (const paragraph of paragraphs) {
-    if (paragraph.trim()) {
-      container.appendChild(
-        element("p", "", paragraph.trim())
+    if (!response.ok) {
+      throw new Error(
+        "Không tìm thấy data/site.json"
       );
+    }
+
+    const data = await response.json();
+
+    // Thông tin trang chủ
+    if (data.site) {
+      const title = document.getElementById("siteTitle");
+      const subtitle = document.getElementById("siteSubtitle");
+      const intro = document.getElementById("introduction");
+
+      if (title && data.site.title) {
+        title.textContent = data.site.title;
+      }
+
+      if (subtitle && data.site.subtitle) {
+        subtitle.textContent = data.site.subtitle;
+      }
+
+      if (intro) {
+        intro.replaceChildren();
+
+        const paragraphs = String(
+          data.site.introduction || ""
+        ).split(/\n\s*\n/);
+
+        paragraphs.forEach(text => {
+          if (text.trim()) {
+            intro.appendChild(
+              createElement("p", "", text.trim())
+            );
+          }
+        });
+      }
+    }
+
+    renderPosts(data.posts || []);
+    renderPhotos(data.photos || []);
+    renderArtworks(data.artworks || []);
+    renderWishes(data.wishes || []);
+
+    console.log("Đã tải dữ liệu báo tường.");
+
+  } catch (error) {
+    console.error("Lỗi tải dữ liệu:", error);
+
+    const intro = document.getElementById("introduction");
+    if (intro) {
+      intro.textContent =
+        "Nội dung đang được cập nhật.";
     }
   }
 }
 
-/* =========================================
-   4. HIỂN THỊ BÀI VIẾT VÀ GÓC THƠ
-========================================= */
+/* ==========================================
+   3. BÀI VĂN VÀ BÀI THƠ
+========================================== */
 
-function renderPosts(posts = []) {
+function renderPosts(posts) {
   const articles = document.getElementById("articleList");
   const poems = document.getElementById("poemList");
 
@@ -99,101 +98,68 @@ function renderPosts(posts = []) {
   articles.replaceChildren();
   poems.replaceChildren();
 
-  for (const post of posts) {
-    const card = element("article", "card");
+  posts.forEach(post => {
+    const card = createElement("article", "card");
 
-    const title = element("h3", "", post.title || "");
-    card.appendChild(title);
+    card.appendChild(
+      createElement("h3", "", post.title || "")
+    );
 
     const content = String(post.content || "");
 
     if (post.type === "poem") {
-      const poem = element("p", "", content);
-
+      const poem = createElement("p", "", content);
       poem.style.whiteSpace = "pre-line";
-
       card.appendChild(poem);
       poems.appendChild(card);
     } else {
-      const previewText =
-        content.length > 200
-          ? content.slice(0, 200) + "..."
-          : content;
-
-      const preview = element(
+      const preview = createElement(
         "p",
         "preview",
-        previewText
+        content.slice(0, 200) +
+          (content.length > 200 ? "..." : "")
       );
 
-      const button = element(
+      const button = createElement(
         "button",
         "btn",
         "Đọc bài viết"
       );
 
       button.type = "button";
-
-      button.addEventListener("click", () => {
-        openArticle(post);
-      });
+      button.onclick = () => openArticle(post);
 
       card.append(preview, button);
       articles.appendChild(card);
     }
-  }
+  });
 }
-
-/* =========================================
-   5. XEM CHI TIẾT BÀI VIẾT
-========================================= */
 
 function openArticle(post) {
   const dialog = document.getElementById("articleDialog");
-  const title = document.getElementById("dialogTitle");
+  if (!dialog) return;
+
+  document.getElementById("dialogTitle").textContent =
+    post.title || "";
+
   const content = document.getElementById("dialogContent");
-
-  if (!dialog || !title || !content) return;
-
-  title.textContent = post.title || "";
   content.textContent = post.content || "";
-
   content.style.whiteSpace = "pre-line";
 
-  if (!dialog.open) {
-    dialog.showModal();
-  }
+  dialog.showModal();
 }
 
-function setupArticleDialog() {
-  const dialog = document.getElementById("articleDialog");
-  const closeButton = document.getElementById("closeDialog");
+/* ==========================================
+   4. THƯ VIỆN ẢNH
+========================================== */
 
-  if (!dialog || !closeButton) return;
-
-  closeButton.addEventListener("click", () => {
-    dialog.close();
-  });
-
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) {
-      dialog.close();
-    }
-  });
-}
-
-/* =========================================
-   6. HIỂN THỊ ALBUM ẢNH
-========================================= */
-
-function renderPhotos(photos = []) {
+function renderPhotos(photos) {
   const gallery = document.getElementById("gallery");
-
   if (!gallery) return;
 
   gallery.replaceChildren();
 
-  for (const photo of photos) {
+  photos.forEach(photo => {
     const figure = document.createElement("figure");
     const img = document.createElement("img");
 
@@ -201,7 +167,7 @@ function renderPhotos(photos = []) {
     img.alt = photo.caption || "Ảnh kỷ niệm";
     img.loading = "lazy";
 
-    const caption = element(
+    const caption = createElement(
       "figcaption",
       "",
       photo.caption || ""
@@ -209,268 +175,204 @@ function renderPhotos(photos = []) {
 
     figure.append(img, caption);
     gallery.appendChild(figure);
-  }
+  });
 }
 
-/* =========================================
-   7. HIỂN THỊ LỜI CHÚC
-========================================= */
+/* ==========================================
+   5. TRANH VẼ - THIỆP - POSTER
+========================================== */
 
-function renderWishes(wishes = []) {
-  const list = document.getElementById("wishList");
+function renderArtworks(artworks) {
+  const container = document.getElementById("artworkList");
+  if (!container) return;
 
-  if (!list) return;
+  container.replaceChildren();
 
-  list.replaceChildren();
-
-  for (const wish of wishes) {
-    const card = element("div", "wish-card");
-
-    const name = element(
-      "strong",
-      "",
-      "🌷 " + (wish.name || "")
+  if (!artworks.length) {
+    container.appendChild(
+      createElement(
+        "p",
+        "artwork-empty",
+        "Các tác phẩm sẽ được cập nhật tại đây."
+      )
     );
-
-    const message = element(
-      "p",
-      "",
-      wish.message || ""
-    );
-
-    card.append(name, message);
-    list.appendChild(card);
+    return;
   }
-}
 
-/* =========================================
-   8. TẢI DỮ LIỆU WEBSITE
-========================================= */
+  artworks
+    .filter(item => item.status !== "rejected")
+    .forEach(item => {
+      const figure = document.createElement("figure");
 
-async function loadWebsite() {
-  try {
-    const data = await request(API + "/public");
+      const img = document.createElement("img");
+      img.src = item.url;
+      img.alt = item.title || "Tác phẩm nghệ thuật";
+      img.loading = "lazy";
 
-    if (!data.site) {
-      throw new Error(
-        "Dữ liệu website thiếu thông tin site."
+      const title = createElement(
+        "h3",
+        "",
+        item.title || ""
       );
-    }
 
-    const siteTitle = document.getElementById("siteTitle");
-    const siteSubtitle = document.getElementById("siteSubtitle");
-    const introduction = document.getElementById("introduction");
+      const author = createElement(
+        "p",
+        "",
+        `${item.author || ""} - Lớp ${item.studentClass || ""}`
+      );
 
-    if (siteTitle && data.site.title) {
-      siteTitle.textContent = data.site.title;
-    }
-
-    if (siteSubtitle && data.site.subtitle) {
-      siteSubtitle.textContent = data.site.subtitle;
-    }
-
-    renderText(
-      introduction,
-      data.site.introduction || ""
-    );
-
-    renderPosts(data.posts || []);
-    renderPhotos(data.photos || []);
-    renderWishes(data.wishes || []);
-
-    console.log("Website đã tải dữ liệu thành công.");
-
-  } catch (error) {
-    console.error("Lỗi tải website:", error);
-
-    const introduction = document.getElementById("introduction");
-
-    if (introduction) {
-      introduction.textContent =
-        "Hiện chưa thể tải nội dung báo tường. " +
-        "Vui lòng kiểm tra kết nối máy chủ.";
-    }
-
-    // Không dùng alert để tránh làm gián đoạn trang web.
-  }
+      figure.append(img, title, author);
+      container.appendChild(figure);
+    });
 }
 
-/* =========================================
-   9. GỬI LỜI CHÚC
-========================================= */
+/* ==========================================
+   6. LỜI CHÚC CÓ SẴN
+========================================== */
 
-function setupWishForm() {
-  const form = document.getElementById("wishForm");
+function renderWishes(wishes) {
+  const container = document.getElementById("wishList");
+  if (!container) return;
 
-  if (!form) return;
+  container.replaceChildren();
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  wishes
+    .filter(wish => wish.status !== "rejected" &&
+      wish.status !== "pending")
+    .forEach(wish => {
+      const card = createElement("div", "wish-card");
 
-    const status = document.getElementById("wishStatus");
+      card.append(
+        createElement("strong", "", "🌷 " + wish.name),
+        createElement("p", "", wish.message)
+      );
 
-    const name = document
-      .getElementById("studentName")
-      .value.trim();
+      container.appendChild(card);
+    });
+}
 
-    const message = document
-      .getElementById("wishMessage")
-      .value.trim();
+/* ==========================================
+   7. GÓC SÁNG TÁC - CHUYỂN TAB
+========================================== */
 
-    if (!name || !message) {
-      status.textContent =
-        "Vui lòng nhập đầy đủ họ tên và lời chúc.";
-      return;
-    }
+function setupCreativeTabs() {
+  const tabs = document.querySelectorAll(".creative-tab");
+  const panels = document.querySelectorAll(".creative-panel");
 
-    const submitButton = form.querySelector(
-      'button[type="submit"]'
-    );
+  if (!tabs.length || !panels.length) return;
 
-    if (submitButton) {
-      submitButton.disabled = true;
-    }
+  function selectTab(name) {
+    tabs.forEach(tab => {
+      const active = tab.dataset.tab === name;
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
 
-    status.textContent = "Đang gửi lời chúc...";
+    panels.forEach(panel => {
+      panel.hidden = panel.id !== "creative-" + name;
+    });
+  }
 
-    try {
-      await request(API + "/wishes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: name,
-          message: message
-        })
-      });
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      selectTab(tab.dataset.tab);
+    });
+  });
 
-      status.textContent =
-        "💌 Đã gửi lời chúc thành công! " +
-        "Lời chúc sẽ hiển thị sau khi được duyệt.";
+  if (location.hash === "#goc-tho") {
+    selectTab("tho");
+  } else {
+    selectTab("van");
+  }
 
-      form.reset();
-
-    } catch (error) {
-      console.error(error);
-
-      status.textContent =
-        "Không thể gửi lời chúc: " + error.message;
-
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-      }
+  window.addEventListener("hashchange", () => {
+    if (location.hash === "#goc-tho") {
+      selectTab("tho");
     }
   });
 }
 
-/* =========================================
-   10. SLIDESHOW TRANG CHỦ
-========================================= */
-
-
-/* ===================================
-   SLIDESHOW - CHUYỂN ẢNH MƯỢT
-=================================== */
+/* ==========================================
+   8. SLIDESHOW TỰ ĐỘNG
+========================================== */
 
 function setupSlideshow() {
   const slideshow = document.querySelector(".hero-slideshow");
   if (!slideshow) return;
 
-  // Ngăn khởi tạo slideshow nhiều lần
   if (slideshow.dataset.initialized === "true") return;
   slideshow.dataset.initialized = "true";
 
-  const slides = Array.from(
-    slideshow.querySelectorAll(".slide")
-  );
-
+  const slides = [...slideshow.querySelectorAll(".slide")];
   const dotsContainer = slideshow.querySelector(".slide-dots");
-  const prevBtn = slideshow.querySelector(".slide-prev");
-  const nextBtn = slideshow.querySelector(".slide-next");
 
   if (!slides.length || !dotsContainer) return;
 
-  let currentIndex = 0;
+  let current = 0;
   let timer = null;
 
-  const INTERVAL = 5000;
+  dotsContainer.replaceChildren();
 
-  // Xóa các chấm cũ
-  dotsContainer.innerHTML = "";
-
-  // Tạo chấm mới
-  slides.forEach((slide, index) => {
+  slides.forEach((_, index) => {
     const dot = document.createElement("button");
     dot.type = "button";
     dot.className = "slide-dot";
-    dot.setAttribute("aria-label", `Xem ảnh ${index + 1}`);
+    dot.setAttribute("aria-label", `Ảnh ${index + 1}`);
 
-    dot.addEventListener("click", () => {
-      goToSlide(index);
-    });
+    dot.onclick = () => {
+      showSlide(index);
+      startTimer();
+    };
 
     dotsContainer.appendChild(dot);
   });
 
-  const dots = Array.from(
-    dotsContainer.querySelectorAll(".slide-dot")
-  );
+  const dots = [...dotsContainer.children];
 
-  // Hiển thị đúng một ảnh
   function showSlide(index) {
-    currentIndex = (index + slides.length) % slides.length;
+    current = (index + slides.length) % slides.length;
 
     slides.forEach((slide, i) => {
-      const active = i === currentIndex;
-
-      slide.classList.toggle("active", active);
-      slide.setAttribute("aria-hidden", String(!active));
+      slide.classList.toggle("active", i === current);
+      slide.setAttribute(
+        "aria-hidden",
+        String(i !== current)
+      );
     });
 
     dots.forEach((dot, i) => {
-      dot.classList.toggle("active", i === currentIndex);
+      dot.classList.toggle("active", i === current);
     });
   }
 
-  // Dừng bộ đếm cũ
   function stopTimer() {
-    if (timer !== null) {
-      clearTimeout(timer);
-      timer = null;
-    }
+    clearTimeout(timer);
+    timer = null;
   }
 
-  // Lên lịch chuyển ảnh tiếp theo
   function startTimer() {
     stopTimer();
 
-    if (slides.length <= 1 || document.hidden) return;
+    if (slides.length < 2 || document.hidden) return;
 
     timer = setTimeout(() => {
-      showSlide(currentIndex + 1);
+      showSlide(current + 1);
       startTimer();
-    }, INTERVAL);
+    }, 5000);
   }
 
-  // Chuyển ảnh thủ công
-  function goToSlide(index) {
-    showSlide(index);
-    startTimer();
-  }
+  slideshow.querySelector(".slide-prev")
+    ?.addEventListener("click", () => {
+      showSlide(current - 1);
+      startTimer();
+    });
 
-  // Nút quay lại
-  prevBtn?.addEventListener("click", () => {
-    goToSlide(currentIndex - 1);
-  });
+  slideshow.querySelector(".slide-next")
+    ?.addEventListener("click", () => {
+      showSlide(current + 1);
+      startTimer();
+    });
 
-  // Nút tiếp theo
-  nextBtn?.addEventListener("click", () => {
-    goToSlide(currentIndex + 1);
-  });
-
-  // Quản lý khi đổi tab trình duyệt
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       stopTimer();
@@ -479,65 +381,28 @@ function setupSlideshow() {
     }
   });
 
-  // Khởi tạo
   showSlide(0);
   startTimer();
 }
 
-
-/* =========================================
-   11. KHỞI ĐỘNG WEBSITE
-========================================= */
+/* ==========================================
+   9. KHỞI ĐỘNG WEBSITE
+========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupArticleDialog();
-  setupWishForm();
-  setupSlideshow();
-  loadWebsite();
-});
-
-/* ===================================
-   GÓC SÁNG TÁC - CHUYỂN TAB
-=================================== */
-
-function setupCreativeTabs() {
-  const tabs = document.querySelectorAll(".creative-tab");
-  const panels = document.querySelectorAll(".creative-panel");
-
-  if (!tabs.length || !panels.length) return;
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const selected = tab.dataset.tab;
-
-      tabs.forEach((item) => {
-        const active = item === tab;
-
-        item.classList.toggle("active", active);
-        item.setAttribute(
-          "aria-selected",
-          String(active)
-        );
-      });
-
-      panels.forEach((panel) => {
-        panel.hidden =
-          panel.id !== "creative-" + selected;
-      });
+  document.getElementById("closeDialog")
+    ?.addEventListener("click", () => {
+      document.getElementById("articleDialog")?.close();
     });
-  });
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-  setupCreativeTabs();
+  // GitHub Pages không có API để nhận lời chúc
+  const wishForm = document.getElementById("wishForm");
 
-  // Hỗ trợ đường dẫn #goc-tho cũ
-  if (window.location.hash === "#goc-tho") {
-    document.querySelector(
-      '.creative-tab[data-tab="tho"]'
-    )?.click();
-
-    document.getElementById("baiviet")
-      ?.scrollIntoView();
+  if (wishForm) {
+    wishForm.hidden = true;
   }
+
+  setupSlideshow();
+  setupCreativeTabs();
+  loadWebsite();
 });
