@@ -495,3 +495,49 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSlideshow();
   loadWebsite();
 });
+
+/* ===================================
+   GÓC SÁNG TÁC - CHUYỂN TAB
+=================================== */
+
+function setupCreativeTabs() {
+  const tabs = document.querySelectorAll(".creative-tab");
+  const panels = document.querySelectorAll(".creative-panel");
+
+  if (!tabs.length || !panels.length) return;
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const selected = tab.dataset.tab;
+
+      tabs.forEach((item) => {
+        const active = item === tab;
+
+        item.classList.toggle("active", active);
+        item.setAttribute(
+          "aria-selected",
+          String(active)
+        );
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden =
+          panel.id !== "creative-" + selected;
+      });
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupCreativeTabs();
+
+  // Hỗ trợ đường dẫn #goc-tho cũ
+  if (window.location.hash === "#goc-tho") {
+    document.querySelector(
+      '.creative-tab[data-tab="tho"]'
+    )?.click();
+
+    document.getElementById("baiviet")
+      ?.scrollIntoView();
+  }
+});

@@ -12,7 +12,16 @@
 
 <header class="header">
   <nav class="nav">
-    <a href="#trangchu" class="brand">🌿 THCS BÌNH LỢI</a>
+    
+<a href="#trangchu" class="brand">
+  <img
+    src="images/logo.png"
+    alt="Logo Trường THCS Bình Lợi"
+    class="school-logo"
+  >
+  <span>THCS BÌNH LỢI</span>
+</a>
+
     <div class="menu">
   <a href="#trangchu">Trang chủ</a>
   <a href="#loingo">Lời ngỏ</a>
@@ -83,21 +92,97 @@
     </div>
   </section>
 
-  <section id="baiviet" class="section soft">
-    <div class="container">
-      <h2 class="section-title">Trang Viết Yêu Thương</h2>
-      <p class="section-desc">Những câu chuyện nhỏ, tình cảm lớn</p>
+
+<!-- GÓC SÁNG TÁC -->
+<section id="baiviet" class="section soft">
+  <div class="container">
+
+    <h2 class="section-title">Góc Sáng Tác</h2>
+    <p class="section-desc">
+      Những trang viết, vần thơ và sắc màu tri ân
+    </p>
+
+    <!-- MENU CHUYỂN DANH MỤC -->
+    <div class="creative-tabs" role="tablist"
+         aria-label="Danh mục sáng tác">
+
+      <button class="creative-tab active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-tab="van">
+        📖 Bài văn
+      </button>
+
+      <button class="creative-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-tab="tho">
+        🪶 Bài thơ
+      </button>
+
+      <button class="creative-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-tab="tranh">
+        🎨 Tranh vẽ
+      </button>
+
+    </div>
+
+    <!-- DANH MỤC BÀI VĂN -->
+    <div id="creative-van" class="creative-panel">
+      <h3 class="creative-heading">
+        Trang Viết Yêu Thương
+      </h3>
+
+      <p class="creative-desc">
+        Những câu chuyện nhỏ, tình cảm lớn
+      </p>
+
       <div id="articleList" class="grid"></div>
     </div>
-  </section>
 
-  <section id="goc-tho" class="section">
-    <div class="container">
-      <h2 class="section-title">Vần Thơ Tri Ân</h2>
-      <p class="section-desc">Tiếng lòng của tuổi học trò</p>
+    <!-- DANH MỤC BÀI THƠ -->
+    <div id="creative-tho"
+         class="creative-panel" hidden>
+
+      <h3 class="creative-heading">
+        Vần Thơ Tri Ân
+      </h3>
+
+      <p class="creative-desc">
+        Tiếng lòng của tuổi học trò
+      </p>
+
       <div id="poemList" class="grid"></div>
     </div>
-  </section>
+
+    <!-- DANH MỤC TRANH VẼ -->
+    <div id="creative-tranh"
+         class="creative-panel" hidden>
+
+      <h3 class="creative-heading">
+        Sắc Màu Tri Ân
+      </h3>
+
+      <p class="creative-desc">
+        Những tác phẩm nghệ thuật gửi tặng thầy cô
+      </p>
+
+      <div id="artworkList" class="gallery">
+        <p class="artwork-empty">
+          Các tác phẩm tranh vẽ, thiệp và poster
+          sẽ được cập nhật tại đây.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
   <section id="album" class="section soft">
     <div class="container">
